@@ -1,0 +1,439 @@
+:root {
+  font-family: Inter, system-ui, Arial, sans-serif;
+  color: #ffffff;
+  background: #050505;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  --red: #ff2d55;
+  --red-dark: #7a0018;
+  --red-soft: rgba(255, 45, 85, 0.18);
+  --panel: rgba(18, 18, 18, 0.92);
+  --border: rgba(255, 45, 85, 0.28);
+  --muted: #9a9a9a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(255, 45, 85, 0.16), transparent 35%),
+    linear-gradient(180deg, #0b0b0b 0%, #030303 100%);
+  color: #fff;
+}
+
+button {
+  font: inherit;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.app {
+  width: min(100%, 480px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 22px 16px 96px;
+  position: relative;
+  overflow: hidden;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--muted);
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 30px;
+  letter-spacing: 2px;
+  color: var(--red);
+  text-shadow:
+    0 0 10px rgba(255, 45, 85, 0.8),
+    0 0 24px rgba(255, 45, 85, 0.35);
+}
+
+.profile-button {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: #fff;
+  background:
+    linear-gradient(145deg, rgba(255, 45, 85, 0.3), rgba(35, 35, 35, 0.95));
+  box-shadow:
+    inset 0 0 16px rgba(255, 45, 85, 0.15),
+    0 0 18px rgba(255, 45, 85, 0.15);
+}
+
+.balance-card,
+.energy-card,
+.action-card,
+.bottom-nav {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow:
+    inset 0 0 20px rgba(255, 45, 85, 0.05),
+    0 12px 30px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+}
+
+.balance-card {
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+
+.balance-label {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.balance-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.coin-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 900;
+  background: linear-gradient(145deg, #ff5474, #a50020);
+  box-shadow:
+    0 0 18px rgba(255, 45, 85, 0.55),
+    inset 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.balance-row strong {
+  font-size: 30px;
+}
+
+.balance-row > span {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.level-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px;
+  color: #cfcfcf;
+  font-size: 12px;
+}
+
+.progress {
+  height: 8px;
+  border-radius: 999px;
+  margin-top: 8px;
+  overflow: hidden;
+  background: #262626;
+}
+
+.progress-value {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff2d55, #ff6b88);
+  box-shadow: 0 0 12px rgba(255, 45, 85, 0.7);
+  transition: width 0.2s ease;
+}
+
+.energy-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 18px;
+  border-radius: 20px;
+}
+
+.energy-card p {
+  margin: 0 0 5px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+}
+
+.energy-symbol {
+  font-size: 30px;
+  filter: drop-shadow(0 0 10px rgba(255, 45, 85, 0.8));
+}
+
+.tap-zone {
+  position: relative;
+  min-height: 330px;
+  display: grid;
+  place-items: center;
+}
+
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.glow-one {
+  width: 210px;
+  height: 210px;
+  background: rgba(255, 45, 85, 0.23);
+}
+
+.glow-two {
+  width: 130px;
+  height: 130px;
+  background: rgba(255, 0, 34, 0.349);
+}
+
+.tap-button {
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+  width: 220px;
+  height: 220px;
+  border: 2px solid rgba(255, 80, 110, 0.75);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background:
+    radial-gradient(circle at 35% 25%, #f80101 0%, #ff0000 28%, #690101 72%, #170005 100%);
+  box-shadow:
+    0 0 20px rgb(245, 3, 3),
+    0 0 55px rgba(255, 45, 85, 0.45),
+    inset 0 0 35px rgba(255, 255, 255, 0.14),
+    inset 0 -18px 35px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease;
+}
+
+.tap-button::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+}
+
+.tap-button:hover {
+  filter: brightness(1.08);
+}
+
+.tap-button.pressed {
+  transform: scale(0.94);
+}
+
+.tap-button.empty {
+  animation: shake 0.4s ease;
+}
+
+.tap-logo {
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 10px;
+  border-radius: 22px;
+  font-size: 34px;
+  font-weight: 900;
+  color: #ff0404;
+  background: #fff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.35);
+}
+
+.tap-button strong {
+  font-size: 19px;
+  letter-spacing: 1px;
+}
+
+.tap-button small {
+  margin-top: 5px;
+  color: #ffd7df;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.action-card {
+  border-radius: 20px;
+  padding: 16px;
+  text-align: left;
+  color: #fff;
+}
+
+.action-card > span {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 25px;
+}
+
+.action-card strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.action-card small {
+  color: var(--muted);
+}
+
+.bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  z-index: 10;
+  width: min(calc(100% - 24px), 456px);
+  transform: translateX(-50%);
+  border-radius: 22px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.nav-item {
+  border: 0;
+  border-radius: 14px;
+  padding: 8px 4px;
+  color: #777;
+  background: transparent;
+}
+
+.nav-item span,
+.nav-item small {
+  display: block;
+}
+
+.nav-item span {
+  margin-bottom: 4px;
+  font-size: 20px;
+}
+
+.nav-item.active {
+  color: #fff;
+  background: var(--red-soft);
+  box-shadow: inset 0 0 14px rgba(255, 45, 85, 0.16);
+}
+
+.nav-item.active span {
+  color: var(--red);
+  text-shadow: 0 0 10px rgba(255, 45, 85, 0.9);
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-8px);
+  }
+
+  75% {
+    transform: translateX(8px);
+  }
+}
+
+@media (max-width: 380px) {
+  .app {
+    padding-inline: 12px;
+  }
+
+  .tap-button {
+    width: 195px;
+    height: 195px;
+  }
+}
+.tap-effect {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+
+  color: #ff334f;
+  font-size: 18px;
+  font-weight: 900;
+  text-shadow:
+    0 0 8px rgb(255, 0, 0),
+    0 0 18px rgb(255, 0, 0);
+
+  transform: translate(-50%, -50%);
+  animation: tapReward 700ms ease-out forwards;
+}
+
+@keyframes tapReward {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -30%) scale(0.7);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -60%) scale(1.15);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -160%) scale(0.9);
+  }
+}
+.ripple{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.35);
+  transform:translate(-50%,-50%) scale(0);
+  pointer-events:none;
+  animation:ripple .6s ease-out;
+}
+
+@keyframes ripple{
+  to{
+    transform:translate(-50%,-50%) scale(4);
+    opacity:0;
+  }
+}
+.tap-button.pulse::after{
+  content:"";
+  position:absolute;
+  inset:-10px;
+  border-radius:50%;
+  border:4px solid rgba(255,80,110,.7);
+  animation:pulseRing .5s ease-out;
+}
+
+@keyframes pulseRing{
+  0%{
+    transform:scale(.9);
+    opacity:1;
+  }
+  100%{
+    transform:scale(1.35);
+    opacity:0;
+  }
+}
