@@ -1,5 +1,7 @@
 import "./style.css";
 
+alert("MAIN JS LOADED");
+
 const tg = window.Telegram?.WebApp;
 
 async function login() {
