@@ -163,6 +163,12 @@ try {
         })
     });
 
+if (!res.ok) {
+    const text = await res.text();
+    alert(text);
+    throw new Error("HTTP " + res.status);
+}
+
     const data = await res.json();
 
     console.log("LOGIN RESULT", data);
@@ -170,6 +176,8 @@ try {
     player = data;
 
     alert("LOGIN SUCCESS");
+
+    alert(e.message);
 
 } catch (e) {
 
