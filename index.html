@@ -144,46 +144,39 @@ const SUPABASE_URL =
 let tg = null;
 let player = null;
 
-async function loginTelegram(){
-
-    tg = window.Telegram.WebApp;
-
+async function loginTelegram() {
+    const tg = window.Telegram.WebApp;
     tg.ready();
-tg.expand();
+    tg.expand();
 
-try {
+    try {
+        const res = await fetch(SUPABASE_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                initData: tg.initData
+            })
+        });
 
-    const res = await fetch(SUPABASE_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            initData: tg.initData
-        })
-    });
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(text || ("HTTP " + res.status));
+        }
 
-if (!res.ok) {
-    const text = await res.text();
-    alert(text);
-    throw new Error("HTTP " + res.status);
-}
+        const data = await res.json();
 
-    const data = await res.json();
+        console.log("LOGIN RESULT", data);
 
-    console.log("LOGIN RESULT", data);
+        player = data;
 
-    player = data;
+        alert("LOGIN SUCCESS");
 
-    alert("LOGIN SUCCESS");
-
-    alert(e.message);
-
-} catch (e) {
-   alert("LOGIN FAILED: " + e.message);
-    console.error(e);
-}
-
+    } catch (e) {
+        alert("LOGIN FAILED: " + e.message);
+        console.error(e);
+    }
 }
 
 loginTelegram();
