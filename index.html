@@ -141,6 +141,25 @@ html,body{scroll-behavior:auto!important}
 const SUPABASE_URL =
 "https://umxypzffelmhrygvlznp.supabase.co/functions/v1/login";
 
+const ME_URL =
+"https://umxypzffelmhrygvlznp.supabase.co/functions/v1/me";
+
+async function loadPlayer() {
+    const res = await fetch(ME_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            telegram_id: player.player.telegram_id
+        })
+    });
+
+    player = await res.json();
+
+    console.log("PLAYER DATA", player);
+}
+
 let tg = null;
 let player = null;
 
@@ -181,15 +200,19 @@ async function loginTelegram() {
 
 loginTelegram();
 
-function waitForLogin(){
+async function waitForLogin(){
+
+    console.log(player);
 
     if(player){
 
-        console.log("PLAYER READY");
+       console.log("PLAYER READY");
 
-        console.log(player);
+await loadPlayer();
 
-        return;
+console.log(player);
+
+return;
     }
 
     setTimeout(waitForLogin,300);
