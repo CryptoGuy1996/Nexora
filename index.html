@@ -144,7 +144,34 @@ const SUPABASE_URL =
 const ME_URL =
 "https://umxypzffelmhrygvlznp.supabase.co/functions/v1/me";
 
+const MINE_URL =
+"https://umxypzffelmhrygvlznp.supabase.co/functions/v1/mine";
+
 async function loadPlayer() {
+    async function mine() {
+
+    const res = await fetch(MINE_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            telegram_id: player.telegram_id
+        })
+    });
+
+    const data = await res.json();
+
+    if (data.success === false) {
+        alert(data.message || data.error);
+        return;
+    }
+
+    player = data;
+
+    console.log("MINED", player);
+
+}
     const res = await fetch(ME_URL, {
         method: "POST",
         headers: {
@@ -409,6 +436,7 @@ function processTapBatch(){
  if(!pendingTaps.length)return;
  const taps=pendingTaps.splice(0,Math.min(pendingTaps.length,8));
  const now=Date.now();
+ mine();
  let totalGain=0,anyCritical=false,used=0;
  for(const t of taps){
   if(energy<1)break;
