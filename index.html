@@ -439,19 +439,20 @@ function lightBurst(x,y,power,critical){
  }
  startParticles();
 }
-function processTapBatch(){
+async function processTapBatch(){
  tapFrame=0;
  if(!pendingTaps.length)return;
  const taps=pendingTaps.splice(0,Math.min(pendingTaps.length,8));
  const now=Date.now();
- mine();
+await minePlayer();
  let totalGain=0,anyCritical=false,used=0;
  for(const t of taps){
   if(energy<1)break;
   comboCount=now-lastTap<650?comboCount+1:1;lastTap=now;
   comboMult=comboCount>=20?10:comboCount>=10?5:comboCount>=5?2:1;
   const critical=Math.random()<(typeof getPlanStats==='function'?getPlanStats().crit:.02),gain=(critical?5:1)*comboMult*(typeof getPlanStats==='function'?getPlanStats().tap:1);
-  energy--;nxPoints+=gain;totalGain+=gain;used++;anyCritical ||= critical;
+  
+  totalGain+=gain;used++;anyCritical ||= critical;
   addFloat(t.x,t.y,'+'+gain+' NX'+(critical?' CRIT!':''),critical);
   lightBurst(t.x,t.y,comboMult>=10?2:1,critical);
  }
