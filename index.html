@@ -346,17 +346,25 @@ function openBox(btn){openMysteryBox('gems')}
 let nxPoints=12450,energy=1000,comboCount=0,comboMult=1,lastTap=0,mining=false,minedNX=0,miningTimer;
 function renderPoints(){const el=document.getElementById('points');if(el)el.textContent=Math.floor(nxPoints).toLocaleString('en-US')}
 function renderEnergy(){const cap=(typeof getPlanStats==='function'?getPlanStats().energy:1000),el=document.getElementById('energy');if(!el)return;el.textContent=Math.floor(energy);const suffix=el.parentElement?.lastChild;if(suffix)suffix.textContent=' / '+cap;const fill=document.getElementById('energyFill');if(fill)fill.style.width=Math.max(0,Math.min(100,energy/cap*100))+'%'}
-function tapCore(ev){if(energy<1){showToast('Energy is empty');return}const now=Date.now();comboCount=now-lastTap<650?comboCount+1:1;lastTap=now;comboMult=comboCount>=20?10:comboCount>=10?5:comboCount>=5?2:1;const critical=Math.random()<.02;const gain=(critical?5:1)*comboMult;energy-=1;nxPoints+=gain;renderPoints();renderEnergy();document.getElementById('combo').textContent='COMBO ×'+comboMult;const core=document.getElementById('core');core.classList.add('tap');core.classList.toggle('overdrive',comboMult>=10);setTimeout(()=>core.classList.remove('tap'),90);const f=document.createElement('span');f.className='float-score';f.textContent='+'+gain+' NX'+(critical?' CRIT!':'');const wrap=document.getElementById('coreWrap');const rect=wrap.getBoundingClientRect();f.style.left=((ev?.clientX||rect.left+rect.width/2)-rect.left-20)+'px';f.style.top=((ev?.clientY||rect.top+rect.height/2)-rect.top-12)+'px';wrap.appendChild(f);setTimeout(()=>f.remove(),900);if(navigator.vibrate)navigator.vibrate(10)}
+async function tapCore(ev) {
+
+    if (!player) return;
+
+    try {
+        await minePlayer();
+    } catch (e) {
+        console.error(e);
+        showToast("Server Error");
+    }
+
+}
 setInterval(()=>{if(energy<1000){energy=Math.min(1000,energy+1);renderEnergy()}if(Date.now()-lastTap>1300&&comboCount){comboCount=0;comboMult=1;document.getElementById('combo').textContent='COMBO ×1';document.getElementById('core').classList.remove('overdrive')}},3000)
 function toggleMining(){mining=!mining;const b=document.getElementById('mineButton'),s=document.getElementById('mineStatus');if(mining){b.textContent='MINING ACTIVE';b.classList.add('running');s.textContent='Mining core is running';showToast('8-hour mining session started');miningTimer=setInterval(()=>{minedNX+=1;document.getElementById('mined').textContent=minedNX},1200)}else{clearInterval(miningTimer);b.textContent='START MINING';b.classList.remove('running');s.textContent='Miner is offline';showToast('Mining paused')}}
 function claimMining(){if(minedNX<1){showToast('No mined NX available');return}nxPoints+=minedNX;showToast('+'+minedNX+' mined NX claimed');minedNX=0;document.getElementById('mined').textContent='0';renderPoints();if(navigator.vibrate)navigator.vibrate([25,30,55])}
 
 
 // Nexora V4: particles, persistence, level progression and richer feedback
-const V4_KEY='nexora-v4-state';
-try{const saved=JSON.parse(localStorage.getItem(V4_KEY)||'null');if(saved){nxPoints=saved.nx??nxPoints;energy=Math.min(1000,saved.energy??energy);minedNX=saved.mined??0;renderPoints();renderEnergy();document.getElementById('mined').textContent=Math.floor(minedNX)}}catch(e){}
-function saveV4(){try{localStorage.setItem(V4_KEY,JSON.stringify({nx:nxPoints,energy,mined:minedNX,t:Date.now()}))}catch(e){}}
-setInterval(saveV4,10000);addEventListener('beforeunload',saveV4);
+
 const canvas=document.getElementById('particleCanvas'),ctx=canvas.getContext('2d');let particles=[];
 function sizeCanvas(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);canvas.width=r.width*d;canvas.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}sizeCanvas();addEventListener('resize',sizeCanvas);
 let particleRAF=0;
@@ -687,4 +695,11 @@ window.addEventListener('offline',()=>showToast('Offline mode enabled'));
 initTelegramV15();
 
 </script>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/energy.js"></script>
+<script src="js/mining.js"></script>
+<script src="js/game.js"></script>
 </body></html>
